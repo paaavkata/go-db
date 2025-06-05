@@ -4,6 +4,7 @@ import (
 	"context"
 	"time"
 
+	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 	_ "github.com/lib/pq"
 )
@@ -81,17 +82,17 @@ func (db *DBService) Exec(ctx context.Context, query string, args ...interface{}
 }
 
 // Query executes a query that returns rows
-func (db *DBService) Query(ctx context.Context, query string, args ...interface{}) (*pgxpool.Rows, error) {
+func (db *DBService) Query(ctx context.Context, query string, args ...interface{}) (pgx.Rows, error) {
 	return db.pool.Query(ctx, query, args...)
 }
 
 // QueryRow executes a query that returns a single row
-func (db *DBService) QueryRow(ctx context.Context, query string, args ...interface{}) *pgxpool.Row {
+func (db *DBService) QueryRow(ctx context.Context, query string, args ...interface{}) pgx.Row {
 	return db.pool.QueryRow(ctx, query, args...)
 }
 
 // Begin starts a new transaction
-func (db *DBService) Begin(ctx context.Context) (*pgxpool.Tx, error) {
+func (db *DBService) Begin(ctx context.Context) (pgx.Tx, error) {
 	return db.pool.Begin(ctx)
 }
 
