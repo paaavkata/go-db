@@ -1,4 +1,4 @@
-module github.com/file-convert/go-db
+module github.com/paaavkata/go-db
 
 go 1.23.0
 
