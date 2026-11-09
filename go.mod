@@ -2,10 +2,7 @@ module github.com/paaavkata/go-db
 
 go 1.26.4
 
-require (
-	github.com/jackc/pgx/v5 v5.9.2
-	github.com/lib/pq v1.10.9
-)
+require github.com/jackc/pgx/v5 v5.9.2
 
 require (
 	github.com/jackc/pgpassfile v1.0.0 // indirect

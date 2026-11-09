@@ -1,0 +1,1 @@
+CREATE TABLE IF NOT EXISTS godb_migrate_test (id INT PRIMARY KEY);

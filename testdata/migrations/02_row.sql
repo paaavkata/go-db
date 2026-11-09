@@ -1,0 +1,1 @@
+INSERT INTO godb_migrate_test (id) VALUES (1) ON CONFLICT DO NOTHING;

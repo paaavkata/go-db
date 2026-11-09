@@ -2,11 +2,13 @@ package godb
 
 import (
 	"context"
+	"fmt"
+	"os"
+	"strconv"
 	"time"
 
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
-	_ "github.com/lib/pq"
 )
 
 const (
@@ -39,10 +41,24 @@ type DBService struct {
 	pool *pgxpool.Pool
 }
 
-// NewDBService creates a new database service with the given configuration
+// NewDBService creates a new database service with the given configuration.
+// With a nil config it uses DefaultConfig, overridden by the DB_MAX_CONNS and
+// DB_MIN_CONNS environment variables when they are set; an unparseable value
+// is an error. An explicit config is used as is.
 func NewDBService(dbUri string, config *DBConfig) (*DBService, error) {
 	if config == nil {
 		config = DefaultConfig()
+		for env, dst := range map[string]*int{"DB_MAX_CONNS": &config.MaxConns, "DB_MIN_CONNS": &config.MinConns} {
+			v := os.Getenv(env)
+			if v == "" {
+				continue
+			}
+			n, err := strconv.Atoi(v)
+			if err != nil || n < 0 {
+				return nil, fmt.Errorf("invalid %s %q: must be a non-negative integer", env, v)
+			}
+			*dst = n
+		}
 	}
 
 	poolConfig, err := pgxpool.ParseConfig(dbUri)
